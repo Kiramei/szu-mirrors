@@ -1,0 +1,52 @@
+<script setup lang="ts">
+import MirrorList from '@/components/MirrorList.vue';
+import { ElIcon, ElInput } from 'element-plus';
+import { Box } from '@element-plus/icons-vue'
+import { ref } from 'vue'
+const searchText = ref('')
+</script>
+
+<template>
+      <main class="mirrorView">
+    <header style="width:100%;display:flex;">
+      <div style="display:flex;">
+        <el-icon :size="30">
+          <Box />
+        </el-icon>
+        <span class="title">
+          镜像列表
+        </span>
+      </div>
+      <div class="flex-grow"></div>
+      <div>
+
+        <ElInput v-model="searchText" placeholder="搜索" />
+      </div>
+    </header>
+    <div class="mirrorList">
+      <MirrorList />
+    </div>
+  </main>
+</template>
+
+<style>
+.mirrorView .title {
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 30px;
+  margin-left: 0.5em;
+}
+
+.mirrorView .mirrorList {
+  margin-top: 20px;
+  height: 100%;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 2px var(--color-text) inset
+}
+</style>
