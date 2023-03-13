@@ -116,7 +116,7 @@ watch(global.pageWidth, () => {
 
 const setBoxWidth = (screenWidth: number) => {
     if (screenWidth >= 450) boxWidth.value = 220
-    else boxWidth.value = 160
+    else boxWidth.value = 170
 }
 
 </script>
