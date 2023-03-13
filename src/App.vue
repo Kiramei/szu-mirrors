@@ -167,6 +167,7 @@ onMounted(() => {
     color: #bfc9d3;
     background-color: #384452;
     flex-direction: row;
+    justify-content: center;
   }
 
   .rightLogo {

@@ -119,6 +119,10 @@ const setBoxWidth = (screenWidth: number) => {
     else boxWidth.value = 170
 }
 
+
+
+
+
 </script>
 
 
@@ -163,8 +167,14 @@ const setBoxWidth = (screenWidth: number) => {
     }
 }
 
+.el-input,
+.el-input__wrapper {
+    background-color: var(--color-background);
+}
 
-
+.el-input__inner {
+    color: var(--color-text, var(--color-text));
+}
 
 .ok-button {
     user-select: none;
@@ -218,18 +228,28 @@ const setBoxWidth = (screenWidth: number) => {
 }
 
 .el-table .warning-row {
-    --el-table-tr-bg-color: var(--el-color-warning-light-9);
+    /* --el-table-tr-bg-color: var(--el-color-warning-light-9); */
 }
 
 .el-table .success-row {
-    --el-table-tr-bg-color: var(--el-color-success-light-9);
+    /* --el-table-tr-bg-color: var(--el-color-success-light-9); */
 }
 
 .el-table .process-row {
-    --el-table-tr-bg-color: rgb(227, 255, 253);
+    /* --el-table-tr-bg-color: rgb(227, 255, 253); */
+}
+
+.el-table {
+    --el-table-bg-color: var(--color-background);
+    --el-table-border-color:var(--color-border);
+    --el-table-text-color: var(--color-text);
+    --el-table-header-text-color:var(--color-text);
+    --el-table-header-bg-color:var(--color-background);
+    --el-table-row-hover-bg-color:var(--color-border-hover);
+    --el-table-tr-bg-color:var(--color-background);
 }
 
 .el-table__header-wrapper {
-    border-bottom: solid 1.5px var(--el-border-color-lighter);
+    border-bottom: solid 1.5px var(--color-border);
 }
 </style>
