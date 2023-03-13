@@ -7,7 +7,7 @@ const searchText = ref('')
 </script>
 
 <template>
-      <main class="mirrorView">
+  <main class="mirrorView">
     <header style="width:100%;display:flex;">
       <div style="display:flex;">
         <el-icon :size="30">
@@ -18,8 +18,7 @@ const searchText = ref('')
         </span>
       </div>
       <div class="flex-grow"></div>
-      <div>
-
+      <div class="search-box">
         <ElInput v-model="searchText" placeholder="搜索" />
       </div>
     </header>
@@ -48,5 +47,10 @@ const searchText = ref('')
 
 .el-input__wrapper.is-focus {
   box-shadow: 0 0 0 2px var(--color-text) inset
+}
+
+.search-box {
+  width: 45%;
+  max-width: 200px;
 }
 </style>

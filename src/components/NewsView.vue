@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ElIcon } from 'element-plus';
-import { BellFilled, DArrowRight } from '@element-plus/icons-vue'
+import { Notification, DArrowRight } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
 
@@ -28,7 +28,7 @@ const newsList = ref([
         <header style="width:100%;display:flex;">
             <div style="display:flex;">
                 <el-icon :size="23">
-                    <BellFilled />
+                    <Notification />
                 </el-icon>
                 <span class="title">
                     新闻公告

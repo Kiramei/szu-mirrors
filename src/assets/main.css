@@ -1,15 +1,5 @@
 @import './base.css';
 
-
-.footer{
-  width: 100%;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  color: #bfc9d3;
-  background-color: #384452;
-}
-
 a{
   cursor: pointer;
   text-decoration: none;

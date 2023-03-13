@@ -1,31 +1,43 @@
 <script setup lang="ts">
 import MirrorView from '@/components/MirrorView.vue';
 import NewsView from '@/components/NewsView.vue';
-
+import TopBarView from '@/components/TopBarView.vue'
+import DownloadView from '@/components/DownloadView.vue'
+import DomainView from '@/components/DomainView.vue'
+import ContactView from '@/components/ContactView.vue'
+import RelatedView from '@/components/RelatedView.vue'
+import FriendView from '@/components/FriendView.vue';
 </script>
 
 <template>
   <header class="header">
-    <a href="/" class="page-title-block">
-      <img src="@/assets/logo.png" width="40px" height="40px" alt="">
-      <div class="page-title">
-        深圳大学开源镜像站
-      </div>
-    </a>
-    <div class="flex-grow"></div>
-
-    <div class="menu-item">EVENTS</div>
-    <div class="menu-item menu-active">MIRRORS</div>
+    <TopBarView />
   </header>
   <div class="container">
     <div class="listContainer">
       <MirrorView />
     </div>
-    <div class="newsContainer">
-      <NewsView />
+    <div class="infoContainer">
+      <div class="newsContainer">
+        <NewsView />
+      </div>
+      <div class="domainContainer">
+        <DomainView />
+      </div>
+      <div class="downloadContainer">
+        <DownloadView />
+      </div>
+      <div class="contactContainer">
+        <ContactView />
+      </div>
+      <div class="relatedContainer">
+        <RelatedView />
+      </div>
+      <div class="friendContainer">
+        <FriendView />
+      </div>
     </div>
   </div>
-
 </template>
 
 
@@ -51,58 +63,23 @@ import NewsView from '@/components/NewsView.vue';
 .header img {
   -webkit-user-drag: none;
   cursor: pointer;
+  width: 40px;
+  height: 40px;
 }
 
-.page-title-block {
+.infoContainer {
   display: flex;
-  user-select: none;
-  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 2.5em;
 }
 
-.page-title {
-  margin-left: 10px;
-  font-weight: bold;
-  font-size: 22px;
-}
-
-.menu-item {
-  cursor: pointer;
-  user-select: none;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 0px 20px 15px 20px;
-  transition: 0.3s ease;
-}
-
-.menu-active {
-  color: var(--color-text);
-  border-bottom: 2px solid var(--color-text);
-}
-
-.menu-item:hover {
-  opacity: 0.7;
-}
-
-
-
-@media screen and (min-width:1024px) {
-  .listContainer {
-    width: 65%;
-  }
-
-  .container {
-    display: flex;
-  }
-
-  .newsContainer {
-    width: 30%;
-    margin: 10px 30px;
-  }
-}
-
-@media screen and (max-width:1024px) {
-  .newsContainer {
-    display: none;
-  }
+.newsContainer,
+.downloadContainer,
+.domainContainer,
+.contactContainer,
+.relatedContainer,
+.friendContainer {
+  width: 100%;
 }
 </style>

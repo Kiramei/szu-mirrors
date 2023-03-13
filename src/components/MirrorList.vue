@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ElTable, ElTableColumn, ElIcon } from 'element-plus';
 import { QuestionFilled } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, watch, inject, onMounted } from 'vue'
+
 interface MirrorItem {
     name: string
     date: string
@@ -12,8 +13,6 @@ interface MirrorItem {
  * Every Ten seconds request the list
  * 
  */
-
- 
 
 const tableData = ref([
     {
@@ -103,6 +102,23 @@ const tableRowClassName = ({
     return ''
 }
 
+const boxWidth = ref(0)
+const global: any = inject('global')
+
+
+onMounted(() => {
+    setBoxWidth(global.pageWidth.value)
+})
+
+watch(global.pageWidth, () => {
+    setBoxWidth(global.pageWidth.value)
+})
+
+const setBoxWidth = (screenWidth: number) => {
+    if (screenWidth >= 450) boxWidth.value = 220
+    else boxWidth.value = 150
+}
+
 </script>
 
 
@@ -118,13 +134,15 @@ const tableRowClassName = ({
                 </div>
             </template>
         </ElTableColumn>
-        <ElTableColumn prop="date" label="Last Update" width="250">
+        <ElTableColumn prop="date" label="Last Update" :width="boxWidth">
             <template #default="scope">
                 <div style="font-size:16px;display: flex;align-items: center;">
                     <span>{{ scope.row.date }}</span>
-                    <span v-if="scope.row.status == 0" class="ok-button">OK</span>
-                    <span v-if="scope.row.status == 1" class="sync-button">syncing</span>
-                    <span v-if="scope.row.status == 2" class="fail-button">failed</span>
+                    <div class="button-set">
+                        <span v-if="scope.row.status == 0" class="ok-button">OK</span>
+                        <span v-if="scope.row.status == 1" class="sync-button">syncing</span>
+                        <span v-if="scope.row.status == 2" class="fail-button">failed</span>
+                    </div>
                 </div>
             </template>
         </ElTableColumn>
@@ -132,6 +150,22 @@ const tableRowClassName = ({
 </template>
 
 <style>
+@media screen and (max-width: 450px) {
+    .button-set {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 450px) {
+    .button-set {
+        display: flex;
+        align-items: center;
+    }
+}
+
+
+
+
 .ok-button {
     user-select: none;
     background-color: var(--el-color-success);
