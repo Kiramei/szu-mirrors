@@ -66,7 +66,7 @@ watch(global.searchText, () => {
 })
 
 const setBoxWidth = (screenWidth: number) => {
-    if (screenWidth >= 450) boxWidth.value = 225
+    if (screenWidth >= 450) boxWidth.value = 250
     else boxWidth.value = 170
 }
 </script>
