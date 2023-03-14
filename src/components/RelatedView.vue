@@ -31,6 +31,9 @@ import { CollectionTag } from '@element-plus/icons-vue'
                 <a :href="item.url">{{ item.content }}</a>
             </li> -->
             <li style="word-break: break-all;">
+              <a href="https://it.szu.edu.cn/">深圳大学信息中心</a>
+            </li>
+            <li style="word-break: break-all;">
                 <a href="https://www.szu.moe">深圳大学Aurora战队</a>
             </li>
         </ul>

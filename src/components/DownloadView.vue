@@ -19,10 +19,10 @@ import { Document } from '@element-plus/icons-vue'
             </div>
         </header>
         <div class="tip">
-            常用发行版iso和应用工具安装包直接下载
+            常用发行版ISO和应用工具安装包直接下载
         </div>
         <div class="button">
-            <ElButton type="primary">获取下载链接</ElButton>
+            <ElButton type="primary">资源整理中</ElButton>
         </div>
     </main>
 </template>

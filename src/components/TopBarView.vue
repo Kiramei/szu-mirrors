@@ -22,14 +22,14 @@ const setTitleText = (screenWidth: number) => {
 
 <template>
     <a href="./" class="page-title-block">
-        <img src="@/assets/logo.png" width="40px" height="40px" alt="">
+        <img src="@/assets/szu-logo.png" width="40px" height="40px" alt="">
         <div class="page-title">
             {{ titleText }}
         </div>
     </a>
     <div class="flex-grow"></div>
     <div class="menu-top">
-        <div class="menu-item">EVENTS</div>
+        <!--div class="menu-item">EVENTS</div-->
         <div class="menu-item menu-active">MIRRORS</div>
     </div>
     <div class="menu-button">

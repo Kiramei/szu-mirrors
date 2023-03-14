@@ -38,21 +38,17 @@ onMounted(() => {
     </div>
     <div class="footer">
       <div class="description">
-        本站由深大电协支持创办，由深大电协运行维护。
+        本站由深圳大学信息中心支持创办，由深圳大学网络安全协会运行维护，致力为高校师生于提供高速的开源软件镜像
         <br />
+        本镜像站正处于试运行阶段，如存在Bug请及时反馈
         <br />
-        深大电协，全名深圳大学电子协会，是由深圳大学热爱电子技术及计算机软件技术的极客组成的学生技术社团。
+        前端：<a href="https://kiramei.cn/">Kiramei</a> 后端/技术：<a href="https://www.hz2016.com">HydroegnE7</a>
         <br />
-        <br />
-        本站相关源码可在(镜像管理器)和(镜像站网页)获取。
-        <br />
-        <br />
-        根据相关法律法规，本站不对XXX提供服务。
       </div>
       <div class="centerBottom">
         <div class="contactBottom">
-          <div class="title">Contact Us</div>
           <div class="centerList">
+            <div class="title">Contact Us</div>
             <ul>
               <li>
                 <ElIcon style="top: 2px;">
@@ -62,33 +58,28 @@ onMounted(() => {
               </li>
               <li>
                 <ElIcon style="top: 2px;">
-                  <OtherIcon />
-                </ElIcon>
-                <span>&nbsp;#SZUEA&nbsp;at&nbsp;WeChat</span>
-              </li>
-              <li>
-                <ElIcon style="top: 2px;">
                   <GithubIcon />
                 </ElIcon>
                 <span> Github</span>
               </li>
               <li>
                 <ElIcon style="top: 2px;">
-                  <SinaIcon />
+                  <OtherIcon />
                 </ElIcon>
-                <span> 新浪微博</span>
+                <span>&nbsp;沧海校区L3-1001</span>
               </li>
             </ul>
           </div>
         </div>
-        <div class="sponsorBottom">
+        <!--div class="sponsorBottom">
           <div class="title">Sponsor</div>
           <div class="psg">
             暂无赞助
           </div>
-        </div>
+        </div-->
       </div>
       <div class="rightLogo">
+        <img src="@/assets/szu-logo.png" alt="">
         <img src="@/assets/aurora-logo.png" alt="">
       </div>
     </div>

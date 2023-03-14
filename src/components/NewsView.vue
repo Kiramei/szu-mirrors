@@ -33,17 +33,17 @@ import { Notification, DArrowRight } from '@element-plus/icons-vue'
             </li> -->
             <li style="word-break: break-all;" >
                 <span style="font-weight: bold;margin-right: 4px;">2023-2-1</span>
-                【公告】2023-2-1镜像站试运营
+                【公告】镜像站试运营
             </li>
         </ul>
-        <footer style="width: 100%;">
+        <!--footer style="width: 100%;">
             <a style="float:right;display: flex;align-items: center;">
                 <span style="margin-top: -4px;">more</span>
                 <el-icon>
                     <DArrowRight />
                 </el-icon>
             </a>
-        </footer>
+        </-->
     </main>
 </template>
 

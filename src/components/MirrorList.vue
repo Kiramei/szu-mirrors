@@ -11,7 +11,7 @@ interface MirrorItem {
 
 /**
  * Every Ten seconds request the list
- * 
+ *
  */
 
 
@@ -45,8 +45,8 @@ onMounted(() => {
 })
 
 const sync = () => {
-    // axios.get('/api/status').then(res => {
-    axios.get('https://status.szu.moe/status').then(res => {
+    axios.get('/api/status').then(res => {
+    //axios.get('https://mirrors.szu.moe/api').then(res => {
         dataResult.value = tableData.value = res.data
     })
 }
@@ -76,8 +76,8 @@ const setBoxWidth = (screenWidth: number) => {
         <ElTableColumn prop="name" label="Name">
             <template #default="scope">
                 <div style="display: flex;align-items: center;">
-                    <a class="linkItem">{{ scope.row.name }}</a>
-                    <el-icon :size="18" color="var(--color-text)" style="margin-left: 5px; cursor: pointer;">
+                    <a class="linkItem" :href=scope.row.name>{{ scope.row.name }}</a>
+                    <el-icon v-if="scope.row.url != null" :size="18" color="var(--color-text)" style="margin-left: 5px; cursor: pointer;">
                         <QuestionFilled />
                     </el-icon>
                 </div>
@@ -90,9 +90,7 @@ const setBoxWidth = (screenWidth: number) => {
                     <div class="button-set">
                         <span v-if="scope.row.status === 0" class="ok-button">OK</span>
                         <span v-if="scope.row.status > 0" class="sync-button">syncing</span>
-                        <span v-if="scope.row.status < 0" class="fail-button">failed
-
-                        </span>
+                        <span v-if="scope.row.status < 0" class="fail-button">failed</span>
                     </div>
                 </div>
                 <span class="corner-tip" v-if="scope.row.status !== 0 && Math.abs(scope.row.status) > 1">{{

@@ -8,17 +8,13 @@ import { ref } from 'vue'
 const contactList = ref([
     {
         tip: '意见反馈',
-        content: 'https://github.com/szuea/issues',
-        url: '#'
+        content: 'https://github.com/szunsa/issues',
+        url: 'https://github.com/szunsa/issues'
     }, {
         tip: '发送邮件',
-        content: 'support@szuea.szu.edu.cn',
-        url: '#'
-    }, {
-        tip: '在线交流',
-        content: '#szuea at WeChat',
-        url: '#'
-    },
+        content: 'szunsa@szu.moe',
+        url: 'mailto:szunsa@szu.moe'
+    }
 ])
 
 </script>

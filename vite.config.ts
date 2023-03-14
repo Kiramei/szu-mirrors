@@ -19,7 +19,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         // target: 'http://' + env.VUE_APP_BASE_API,
-        target: 'https://status.szu.moe', // 
+        target: 'https://mirrors.szu.moe/api', //
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },

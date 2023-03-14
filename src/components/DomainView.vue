@@ -6,15 +6,16 @@ import { ref } from 'vue'
 
 const domainList = ref([
     {
-        url: 'https://mirrors.ea.szu.edu.cn',
-        tip: '自动选择'
-    }, {
+        url: 'mirrors.szu.moe',
+        tip: '自动解析（仅内部网）'
+    }
+    /*, {
         url: 'https://mirrors6.ea.szu.edu.cn',
         tip: '只解析IPv6'
     }, {
         url: 'https://mirrors4.ea.szu.edu.cn',
         tip: '只解析IPv4'
-    },
+    },*/
 ])
 </script>
 
