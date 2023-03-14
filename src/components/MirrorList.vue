@@ -45,7 +45,8 @@ onMounted(() => {
 })
 
 const sync = () => {
-    axios.get('/api/status').then(res => {
+    // axios.get('/api/status').then(res => {
+    axios.get('https://status.szu.moe/status').then(res => {
         dataResult.value = tableData.value = res.data
     })
 }

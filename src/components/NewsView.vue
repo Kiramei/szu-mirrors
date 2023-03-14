@@ -3,14 +3,14 @@
 import { ElIcon } from 'element-plus';
 import { Notification, DArrowRight } from '@element-plus/icons-vue'
 
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
-type News = {
-    date: string,
-    content: string
-}
+// type News = {
+//     date: string,
+//     content: string
+// }
 
-const newsList = ref([])
+// const newsList = ref([])
 
 </script>
 
