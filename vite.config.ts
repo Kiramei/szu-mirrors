@@ -12,5 +12,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  base:'./'
+  base: './',
+  server: {
+    // port:5173,
+    cors: true,
+    proxy: {
+      '/api': {
+        // target: 'http://' + env.VUE_APP_BASE_API,
+        target: 'https://status.szu.moe', // 
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+    }
+  }
 })

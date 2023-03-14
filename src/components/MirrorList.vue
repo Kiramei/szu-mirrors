@@ -2,10 +2,10 @@
 import { ElTable, ElTableColumn, ElIcon } from 'element-plus';
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ref, watch, inject, onMounted } from 'vue'
-
+import axios from 'axios'
 interface MirrorItem {
     name: string
-    date: string
+    lastupdate: string
     status: number
 }
 
@@ -14,120 +14,64 @@ interface MirrorItem {
  * 
  */
 
-const tableData = ref([
-    {
-        name: "AOSP",
-        date: "2023-03-11 20:40",
-        status: 0
-    },
-    {
-        name: "Adoptium",
-        date: "2023-03-09 04:28",
-        status: 1
-    },
-    {
-        name: "Koo",
-        date: "2023-02-01 02:52",
-        status: 2
-    }, {
-        name: "AOSP",
-        date: "2023-03-11 20:40",
-        status: 0
-    },
-    {
-        name: "Adoptium",
-        date: "2023-03-09 04:28",
-        status: 1
-    },
-    {
-        name: "Koo",
-        date: "2023-02-01 02:52",
-        status: 2
-    }, {
-        name: "AOSP",
-        date: "2023-03-11 20:40",
-        status: 0
-    },
-    {
-        name: "Adoptium",
-        date: "2023-03-09 04:28",
-        status: 1
-    },
-    {
-        name: "Koo",
-        date: "2023-02-01 02:52",
-        status: 2
-    }, {
-        name: "AOSP",
-        date: "2023-03-11 20:40",
-        status: 0
-    },
-    {
-        name: "Adoptium",
-        date: "2023-03-09 04:28",
-        status: 1
-    },
-    {
-        name: "Koo",
-        date: "2023-02-01 02:52",
-        status: 2
-    }, {
-        name: "AOSP",
-        date: "2023-03-11 20:40",
-        status: 0
-    },
-    {
-        name: "Adoptium",
-        date: "2023-03-09 04:28",
-        status: 1
-    },
-    {
-        name: "Koo",
-        date: "2023-02-01 02:52",
-        status: 2
-    },])
 
 const tableRowClassName = ({
     row
 }: {
     row: MirrorItem
 }) => {
-    if (row.status === 1) {
+    if (row.status > 0) {
         return 'process-row'
-    } else if (row.status === 4) {
+    } else if (row.status === 0) {
         return 'success-row'
-    } else if (row.status === 2) {
+    } else if (row.status < 0) {
         return 'warning-row'
     }
     return ''
 }
 
+
 const boxWidth = ref(0)
+const tableData = ref([])
+const dataResult = ref([])
+// const searchMode = ref(false)
 const global: any = inject('global')
 
 
 onMounted(() => {
     setBoxWidth(global.pageWidth.value)
+    sync();
+    setInterval(sync, 10000);
 })
+
+const sync = () => {
+    axios.get('/api/status').then(res => {
+        dataResult.value = tableData.value = res.data
+    })
+}
 
 watch(global.pageWidth, () => {
     setBoxWidth(global.pageWidth.value)
 })
 
+watch(global.searchText, () => {
+    let sText: string = global.searchText.value
+    if (sText.length > 0)
+        dataResult.value =
+            tableData.value.filter(
+                (e: MirrorItem) => e.name.indexOf(sText) != -1)
+    else
+        dataResult.value = tableData.value
+})
+
 const setBoxWidth = (screenWidth: number) => {
-    if (screenWidth >= 450) boxWidth.value = 220
+    if (screenWidth >= 450) boxWidth.value = 225
     else boxWidth.value = 170
 }
-
-
-
-
-
 </script>
 
-
 <template>
-    <ElTable :data="tableData" :row-class-name="tableRowClassName">
+    <ElTable :data="dataResult" :row-class-name="tableRowClassName">
         <ElTableColumn prop="name" label="Name">
             <template #default="scope">
                 <div style="display: flex;align-items: center;">
@@ -141,13 +85,17 @@ const setBoxWidth = (screenWidth: number) => {
         <ElTableColumn prop="date" label="Last Update" :width="boxWidth">
             <template #default="scope">
                 <div style="font-size:16px;display: flex;align-items: center;">
-                    <span>{{ scope.row.date }}</span>
+                    <span>{{ scope.row.lastupdate }}</span>
                     <div class="button-set">
-                        <span v-if="scope.row.status == 0" class="ok-button">OK</span>
-                        <span v-if="scope.row.status == 1" class="sync-button">syncing</span>
-                        <span v-if="scope.row.status == 2" class="fail-button">failed</span>
+                        <span v-if="scope.row.status === 0" class="ok-button">OK</span>
+                        <span v-if="scope.row.status > 0" class="sync-button">syncing</span>
+                        <span v-if="scope.row.status < 0" class="fail-button">failed
+
+                        </span>
                     </div>
                 </div>
+                <span class="corner-tip" v-if="scope.row.status !== 0 && Math.abs(scope.row.status) > 1">{{
+                    Math.abs(scope.row.status) }}</span>
             </template>
         </ElTableColumn>
     </ElTable>
@@ -218,6 +166,21 @@ const setBoxWidth = (screenWidth: number) => {
     text-shadow: 1px 0px #848484bf;
 }
 
+.corner-tip {
+    position: absolute;
+    margin-left: 190px;
+    margin-top: -23px;
+    min-width: 16px;
+    font-size: 10px;
+    background: var(--el-color-danger);
+    color: white;
+    border-radius: 10px;
+    line-height: 10px;
+    padding: 3px;
+    text-align: center;
+    user-select: none;
+}
+
 .linkItem {
     font-size: 16px;
 }
@@ -228,25 +191,25 @@ const setBoxWidth = (screenWidth: number) => {
 }
 
 .el-table .warning-row {
-    /* --el-table-tr-bg-color: var(--el-color-warning-light-9); */
+    --el-table-tr-bg-color: #e6a23c33;
 }
 
 .el-table .success-row {
-    /* --el-table-tr-bg-color: var(--el-color-success-light-9); */
+    --el-table-tr-bg-color: #67c23a32;
 }
 
 .el-table .process-row {
-    /* --el-table-tr-bg-color: rgb(227, 255, 253); */
+    --el-table-tr-bg-color: rgb(227, 255, 253);
 }
 
 .el-table {
     --el-table-bg-color: var(--color-background);
-    --el-table-border-color:var(--color-border);
+    --el-table-border-color: var(--color-border);
     --el-table-text-color: var(--color-text);
-    --el-table-header-text-color:var(--color-text);
-    --el-table-header-bg-color:var(--color-background);
-    --el-table-row-hover-bg-color:var(--color-border-hover);
-    --el-table-tr-bg-color:var(--color-background);
+    --el-table-header-text-color: var(--color-text);
+    --el-table-header-bg-color: var(--color-background);
+    --el-table-row-hover-bg-color: var(--color-border-hover);
+    --el-table-tr-bg-color: var(--color-background);
 }
 
 .el-table__header-wrapper {

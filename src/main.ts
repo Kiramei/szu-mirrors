@@ -8,10 +8,14 @@ const app = createApp(App)
 
 const pageWidth = ref(0)
 
+const searchText = ref('')
+
+
 app.use(router)
 
 app.provide('global', {
-    pageWidth
+    pageWidth,
+    searchText
 })
 
 app.mount('#app')

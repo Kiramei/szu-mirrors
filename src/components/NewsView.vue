@@ -5,21 +5,12 @@ import { Notification, DArrowRight } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
 
-const newsList = ref([
-    {
-        date: '2023-02-22',
-        content: '关于移除 sagemath 仓库的通知'
-    }, {
-        date: '2023-02-22',
-        content: '关于移除 sagemath 仓库的通知'
-    }, {
-        date: '2023-02-22',
-        content: '关于移除 sagemath 仓库的通知'
-    }, {
-        date: '2023-02-22',
-        content: '关于移除 sagemath 仓库的通知'
-    },
-])
+type News = {
+    date: string,
+    content: string
+}
+
+const newsList = ref([])
 
 </script>
 
@@ -36,9 +27,13 @@ const newsList = ref([
             </div>
         </header>
         <ul style="margin: 5px 0;">
-            <li style="word-break: break-all;" v-for="item in newsList" :key="item.date">
+            <!-- <li style="word-break: break-all;" v-for="item in newsList" :key="item.date">
                 <span style="font-weight: bold;margin-right: 4px;">{{ item.date }}</span>
                 {{ item.content }}
+            </li> -->
+            <li style="word-break: break-all;" >
+                <span style="font-weight: bold;margin-right: 4px;">2023-2-1</span>
+                【公告】2023-2-1镜像站试运营
             </li>
         </ul>
         <footer style="width: 100%;">

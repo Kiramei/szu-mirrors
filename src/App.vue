@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import 'element-plus/dist/index.css'
 import { onMounted, inject } from 'vue';
-import { ElIcon } from 'element-plus';
+import { ElIcon, ElScrollbar } from 'element-plus';
 import { Message } from '@element-plus/icons-vue'
 import GithubIcon from './components/icon/GithubIcon.vue';
 import OtherIcon from './components/icon/OtherIcon.vue';
@@ -21,76 +21,78 @@ onMounted(() => {
 
 <template>
   <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <div class="wrapper">
+        <HelloWorld msg="You did it!" />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </nav>
+      </div>
+    </header> -->
+  <ElScrollbar height="100vh">
+    <div class="app">
+      <RouterView />
     </div>
-  </header> -->
-  <div class="app">
-    <RouterView />
-  </div>
-  <div class="footer">
-    <div class="description">
-      本站由深大电协支持创办，由深大电协运行维护。
-      <br />
-      <br />
-      深大电协，全名深圳大学电子协会，是由深圳大学热爱电子技术及计算机软件技术的极客组成的学生技术社团。
-      <br />
-      <br />
-      本站相关源码可在(镜像管理器)和(镜像站网页)获取。
-      <br />
-      <br />
-      根据相关法律法规，本站不对XXX提供服务。
-    </div>
-    <div class="centerBottom">
-      <div class="contactBottom">
-        <div class="title">Contact Us</div>
-        <div class="centerList">
-          <ul>
-            <li>
-              <ElIcon style="top: 2px;">
-                <Message />
-              </ElIcon>
-              <span>&nbsp;Mailing&nbsp;List</span>
-            </li>
-            <li>
-              <ElIcon style="top: 2px;">
-                <OtherIcon />
-              </ElIcon>
-              <span>&nbsp;#SZUEA&nbsp;at&nbsp;WeChat</span>
-            </li>
-            <li>
-              <ElIcon style="top: 2px;">
-                <GithubIcon />
-              </ElIcon>
-              <span> Github</span>
-            </li>
-            <li>
-              <ElIcon style="top: 2px;">
-                <SinaIcon />
-              </ElIcon>
-              <span> 新浪微博</span>
-            </li>
-          </ul>
+    <div class="footer">
+      <div class="description">
+        本站由深大电协支持创办，由深大电协运行维护。
+        <br />
+        <br />
+        深大电协，全名深圳大学电子协会，是由深圳大学热爱电子技术及计算机软件技术的极客组成的学生技术社团。
+        <br />
+        <br />
+        本站相关源码可在(镜像管理器)和(镜像站网页)获取。
+        <br />
+        <br />
+        根据相关法律法规，本站不对XXX提供服务。
+      </div>
+      <div class="centerBottom">
+        <div class="contactBottom">
+          <div class="title">Contact Us</div>
+          <div class="centerList">
+            <ul>
+              <li>
+                <ElIcon style="top: 2px;">
+                  <Message />
+                </ElIcon>
+                <span>&nbsp;Mailing&nbsp;List</span>
+              </li>
+              <li>
+                <ElIcon style="top: 2px;">
+                  <OtherIcon />
+                </ElIcon>
+                <span>&nbsp;#SZUEA&nbsp;at&nbsp;WeChat</span>
+              </li>
+              <li>
+                <ElIcon style="top: 2px;">
+                  <GithubIcon />
+                </ElIcon>
+                <span> Github</span>
+              </li>
+              <li>
+                <ElIcon style="top: 2px;">
+                  <SinaIcon />
+                </ElIcon>
+                <span> 新浪微博</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="sponsorBottom">
+          <div class="title">Sponsor</div>
+          <div class="psg">
+            暂无赞助
+          </div>
         </div>
       </div>
-      <div class="sponsorBottom">
-        <div class="title">Sponsor</div>
-        <div class="psg">
-          暂无赞助
-        </div>
+      <div class="rightLogo">
+        <img src="@/assets/aurora-logo.png" alt="">
       </div>
     </div>
-    <div class="rightLogo">
-      <img src="@/assets/logo.png" alt="">
-    </div>
-  </div>
+  </ElScrollbar>
 </template>
 
 <style scoped>
@@ -119,7 +121,6 @@ onMounted(() => {
   }
 
   .rightLogo img {
-    width: 100px;
     height: 100px;
   }
 
@@ -171,16 +172,15 @@ onMounted(() => {
   }
 
   .rightLogo {
-    margin-left: 50px;
+    margin-left: 0px;
   }
 
   .rightLogo img {
-    width: 100px;
     height: 100px;
   }
 
   .centerBottom {
-    width: 50%;
+    width: 35%;
     max-width: 450px;
   }
 

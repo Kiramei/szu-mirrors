@@ -6,7 +6,7 @@ import DownloadView from '@/components/DownloadView.vue'
 import DomainView from '@/components/DomainView.vue'
 import ContactView from '@/components/ContactView.vue'
 import RelatedView from '@/components/RelatedView.vue'
-import FriendView from '@/components/FriendView.vue';
+// import FriendView from '@/components/FriendView.vue';
 </script>
 
 <template>
@@ -33,9 +33,9 @@ import FriendView from '@/components/FriendView.vue';
       <div class="relatedContainer">
         <RelatedView />
       </div>
-      <div class="friendContainer">
+      <!-- <div class="friendContainer">
         <FriendView />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

@@ -2,8 +2,10 @@
 import MirrorList from '@/components/MirrorList.vue';
 import { ElIcon, ElInput } from 'element-plus';
 import { Box } from '@element-plus/icons-vue'
-import { ref } from 'vue'
-const searchText = ref('')
+import { inject } from 'vue'
+
+const global: any = inject('global')
+
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const searchText = ref('')
       </div>
       <div class="flex-grow"></div>
       <div class="search-box">
-        <ElInput v-model="searchText" placeholder="搜索" />
+        <ElInput v-model="global.searchText.value" placeholder="搜索" />
       </div>
     </header>
     <div class="mirrorList">
