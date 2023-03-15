@@ -46,7 +46,7 @@ onMounted(() => {
 
 const sync = () => {
     axios.get('/api/status').then(res => {
-    //axios.get('https://mirrors.szu.moe/api').then(res => {
+        //axios.get('https://mirrors.szu.moe/api').then(res => {
         dataResult.value = tableData.value = res.data
     })
 }
@@ -77,7 +77,8 @@ const setBoxWidth = (screenWidth: number) => {
             <template #default="scope">
                 <div style="display: flex;align-items: center;">
                     <a class="linkItem" :href=scope.row.name>{{ scope.row.name }}</a>
-                    <el-icon v-if="scope.row.url != null" :size="18" color="var(--color-text)" style="margin-left: 5px; cursor: pointer;">
+                    <el-icon v-if="scope.row.url != null" :size="18" color="var(--color-text)"
+                        style="margin-left: 5px; cursor: pointer;">
                         <QuestionFilled />
                     </el-icon>
                 </div>
@@ -93,8 +94,9 @@ const setBoxWidth = (screenWidth: number) => {
                         <span v-if="scope.row.status < 0" class="fail-button">failed</span>
                     </div>
                 </div>
-                <span class="corner-tip" v-if="scope.row.status !== 0 && Math.abs(scope.row.status) > 1">{{
-                    Math.abs(scope.row.status) }}</span>
+                <span :class="{ 'corner-tip': true, 'sync-tip': scope.row.status > 1 }"
+                    v-if="scope.row.status !== 0 && Math.abs(scope.row.status) > 1">{{
+                        Math.abs(scope.row.status) }}</span>
             </template>
         </ElTableColumn>
     </ElTable>
@@ -178,6 +180,10 @@ const setBoxWidth = (screenWidth: number) => {
     padding: 3px;
     text-align: center;
     user-select: none;
+}
+
+.sync-tip {
+    margin-left: 202px;
 }
 
 .linkItem {
