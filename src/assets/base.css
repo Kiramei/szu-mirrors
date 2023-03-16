@@ -4,7 +4,7 @@
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
-  --vt-c-black: #181818;
+  --vt-c-black: #0d1117;
   --vt-c-black-soft: #222222;
   --vt-c-black-mute: #282828;
 
@@ -19,6 +19,22 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.88);
+
+  --vt-c-row-light: rgba(255, 255, 255, 0.5);
+  --vt-c-row-dark: rgba(0, 0, 0, 0.5);
+
+  --vt-c-sync-button-color-light: #5bc0de;
+  --vt-c-fail-button-color-light: #e6a23c;
+  --vt-c-ok-button-color-light: #67c23a;
+  --vt-c-button-text-color-light:#ffffff;
+  --vt-c-corner-tip-color-light:#f56c6c;
+  
+  --vt-c-sync-button-color-dark: #367284;
+  --vt-c-fail-button-color-dark: #805a22;
+  --vt-c-ok-button-color-dark: #3c7122;
+  --vt-c-button-text-color-dark:#d2d2d2;
+  --vt-c-corner-tip-color-dark:#c55858;
+
 }
 
 /* semantic color variables for this project */
@@ -32,8 +48,35 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
-
+  --table-row-color: var(--vt-c-row-light);
   --section-gap: 160px;
+
+  --ok-button-color: var(--vt-c-ok-button-color-light);
+  --fail-button-color: var(--vt-c-fail-button-color-light);
+  --sync-button-color: var(--vt-c-sync-button-color-light);
+  --corner-tip-color:var(--vt-c-corner-tip-color-light);
+  --status-button-text-color:var(--vt-c-button-text-color-light);
+
+}
+
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: #e6a23c33;
+}
+
+.el-table .success-row {
+  --el-table-tr-bg-color: #67c23a32;
+}
+
+.el-table .process-row {
+  --el-table-tr-bg-color: rgba(106, 227, 219, 0.178);
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: rgb(50, 136, 217);
+  transition: 0.6s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,7 +90,54 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --table-row-color: var(--vt-c-row-dark);
+
+    --ok-button-color: var(--vt-c-ok-button-color-dark);
+    --fail-button-color: var(--vt-c-fail-button-color-dark);
+    --sync-button-color: var(--vt-c-sync-button-color-dark);
+    --corner-tip-color:var(--vt-c-corner-tip-color-dark);
+
+  --status-button-text-color:var(--vt-c-button-text-color-dark);
+
   }
+
+  .el-button:focus,.el-button:hover,.el-button:active,.el-button{
+    color: var(--color-text);
+    outline: none;
+    --el-text-color-regular:var(--color-text);
+    --el-button-bg-color:var(--color-background);
+    --el-button-hover-bg-color:var(--color-background);
+    --el-button-hover-border-color: var(--color-text);
+    --el-button-active-color: #ffffff69;
+    --el-button-active-bg-color:#ffffff39;
+    --el-button-active-border-color:#ffffff39;
+  } 
+
+  .el-dropdown-menu__item,.el-dropdown-menu{
+    color: var(--color-text);
+    background-color: var(--color-background);
+  }
+  
+
+  .el-table .warning-row {
+    --el-table-tr-bg-color: #e6a23c33;
+  }
+
+  .el-table .success-row {
+    --el-table-tr-bg-color: #67c23a32;
+  }
+
+  .el-table .process-row {
+    --el-table-tr-bg-color: rgba(227, 255, 253, 0.298);
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(184, 221, 255);
+    transition: 0.6s;
+  }
+
 }
 
 *,
@@ -65,6 +155,7 @@
   background-color: var(--color-text);
   color: var(--vt-c-white);
 }
+
 
 body {
   min-height: 100vh;

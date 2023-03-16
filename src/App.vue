@@ -6,7 +6,6 @@ import { ElIcon, ElScrollbar } from 'element-plus';
 import { Message } from '@element-plus/icons-vue'
 import GithubIcon from './components/icon/GithubIcon.vue';
 import OtherIcon from './components/icon/OtherIcon.vue';
-import SinaIcon from './components/icon/SinaIcon.vue';
 
 const global: any = inject('global')
 
@@ -220,7 +219,6 @@ onMounted(() => {
 .app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 1rem 2rem 2rem 2rem;
   font-weight: normal;
   overflow-x: hidden;
 }

@@ -47,7 +47,7 @@ import RelatedView from '@/components/RelatedView.vue'
 }
 
 .header {
-  margin-right: 20px;
+  padding: 1rem 2rem 0 2rem;
   display: flex;
   margin-bottom: 40px;
 }
@@ -65,6 +65,10 @@ import RelatedView from '@/components/RelatedView.vue'
   cursor: pointer;
   width: 40px;
   height: 40px;
+}
+
+.container{
+  padding: 0 2rem 2rem 2rem;
 }
 
 .infoContainer {

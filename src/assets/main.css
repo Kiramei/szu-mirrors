@@ -1,14 +1,11 @@
 @import './base.css';
 
-a{
-  cursor: pointer;
-  text-decoration: none;
-  color: rgb(50, 136, 217);
-  transition: 0.6s;
+@media (hover: hover) and (prefers-color-scheme: dark){
+  a:hover {
+    color: rgb(86, 182, 255);
+  }
 }
 
-@media (hover: hover) {
-  a:hover {
-    color: rgb(153, 200, 244);
-  }
+a:hover{
+  color: rgb(78, 106, 124);
 }

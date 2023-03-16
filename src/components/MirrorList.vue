@@ -67,7 +67,7 @@ watch(global.searchText, () => {
 
 const setBoxWidth = (screenWidth: number) => {
     if (screenWidth >= 450) boxWidth.value = 250
-    else boxWidth.value = 180
+    else boxWidth.value = 185
 }
 </script>
 
@@ -127,8 +127,8 @@ const setBoxWidth = (screenWidth: number) => {
 
 .ok-button {
     user-select: none;
-    background-color: var(--el-color-success);
-    color: white;
+    background-color: var(--ok-button-color);
+    color: var(--status-button-text-color);
     border-radius: 5px;
     padding: 0px 6px 0px 5px;
     height: 20px;
@@ -141,8 +141,8 @@ const setBoxWidth = (screenWidth: number) => {
 
 .sync-button {
     user-select: none;
-    background-color: #5bc0de;
-    color: white;
+    background-color: var(--sync-button-color);
+    color: var(--status-button-text-color);
     border-radius: 5px;
     padding: 0px 6px 0px 5px;
     height: 20px;
@@ -155,8 +155,8 @@ const setBoxWidth = (screenWidth: number) => {
 
 .fail-button {
     user-select: none;
-    background-color: var(--el-color-warning);
-    color: white;
+    background-color: var(--fail-button-color);
+    color: var(--status-button-text-color);
     border-radius: 5px;
     padding: 0px 6px 0px 5px;
     height: 20px;
@@ -173,7 +173,7 @@ const setBoxWidth = (screenWidth: number) => {
     margin-top: -23px;
     min-width: 16px;
     font-size: 10px;
-    background: var(--el-color-danger);
+    background: var(--corner-tip-color);
     color: white;
     border-radius: 10px;
     line-height: 10px;
@@ -195,25 +195,13 @@ const setBoxWidth = (screenWidth: number) => {
     font-weight: 600;
 }
 
-.el-table .warning-row {
-    --el-table-tr-bg-color: #e6a23c33;
-}
-
-.el-table .success-row {
-    --el-table-tr-bg-color: #67c23a32;
-}
-
-.el-table .process-row {
-    --el-table-tr-bg-color: rgb(227, 255, 253);
-}
-
 .el-table {
     --el-table-bg-color: var(--color-background);
     --el-table-border-color: var(--color-border);
     --el-table-text-color: var(--color-text);
     --el-table-header-text-color: var(--color-text);
     --el-table-header-bg-color: var(--color-background);
-    --el-table-row-hover-bg-color: var(--color-border-hover);
+    --el-table-row-hover-bg-color: var(--table-row-color);
     --el-table-tr-bg-color: var(--color-background);
 }
 

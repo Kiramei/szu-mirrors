@@ -67,7 +67,7 @@ const setTitleText = (screenWidth: number) => {
     user-select: none;
     font-size: 13px;
     font-weight: 500;
-    padding: 0px 20px 15px 20px;
+    padding: 0px 20px 18px 20px;
     transition: 0.3s ease;
 }
 
