@@ -19,18 +19,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <header>
-                                <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-                                <div class="wrapper">
-                                  <HelloWorld msg="You did it!" />
-
-                                  <nav>
-                                    <RouterLink to="/">Home</RouterLink>
-                                    <RouterLink to="/about">About</RouterLink>
-                                  </nav>
-                                </div>
-                              </header> -->
   <ElScrollbar height="100vh">
     <div class="app">
       <RouterView />
@@ -54,34 +42,29 @@ onMounted(() => {
                   <ElIcon style="top: 2px;">
                     <Message />
                   </ElIcon>
-                <span>&nbsp;Mailing&nbsp;List</span>
+                  <span>&nbsp;Mailing&nbsp;List</span>
                 </a>
-            </li>
-            <li>
-              <a href="#">
-                <ElIcon style="top: 2px;">
-                  <GithubIcon />
+              </li>
+              <li>
+                <a href="#">
+                  <ElIcon style="top: 2px;">
+                    <GithubIcon />
                   </ElIcon>
                   <span> Github</span>
                 </a>
               </li>
               <li>
                 <a href="#">
-                <ElIcon style="top: 2px;">
-                  <OtherIcon />
-                </ElIcon>
-                <span>&nbsp;沧海校区L3-1001</span>
+                  <ElIcon style="top: 2px;">
+                    <OtherIcon />
+                  </ElIcon>
+                  <span>&nbsp;沧海校区L3-1001</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        <!--div class="sponsorBottom">
-                                    <div class="title">Sponsor</div>
-                                    <div class="psg">
-                                      暂无赞助
-                                    </div>
-                                  </div-->
+        <!-- <div class="sponsorBottom"> <div class="title">Sponsor</div> <div class="psg"> 暂无赞助 </div> </div> -->
       </div>
       <div class="rightLogo">
         <img src="@/assets/szu-logo.png" alt="">
@@ -258,7 +241,7 @@ nav a:first-of-type {
   border: 0;
 }
 
-.centerList ul li a{
+.centerList ul li a {
   color: #bfc9d3;
 }
 </style>

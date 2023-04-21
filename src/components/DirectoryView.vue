@@ -3,42 +3,54 @@ import { ElTable, ElTableColumn, ElIcon } from 'element-plus';
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ref, watch, inject, onMounted } from 'vue'
 import axios from 'axios'
+import { useRoute } from 'vue-router';
 
+const directory = ref([])
+const __route__ = useRoute()
 /**
- * 定义返回的json单元对象
- * name : 镜像名
- * lastupdate : 最后更新时间
- * status : 当前状态
+ * routing负责目录的路由
  */
-interface MirrorItem {
-    name: string
-    lastupdate: string
-    status: number
-}
-
+const routing = () => axios(__route__.fullPath).then(res => {
+    //获取反向代理的数据
+    const origin = res.data
+    //hrefs的正则匹配，用于筛选<a href="">中href的值
+    const regex_1 = /<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/gi;
+    const matches_1 = origin.match(regex_1);
+    const hrefs = matches_1?.map((match: string) => match.replace(/<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/i, '$1'));
+    //dates的正则匹配，用于筛选<a href="">后面的日期信息
+    const regex_2 = /<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/gi;
+    const matches_2 = origin.match(regex_2);
+    const dates = ['', ...matches_2?.map((match: string) => match.replace(/<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/i, '$1')) ?? []];
+    //返回表中所需填充的信息，作为对象数组返回
+    directory.value = hrefs?.map((_e: string, i: number) => {
+        let url: string
+        //以下生成真实目录名，考虑各种情况
+        if (hrefs?.at(i) === '../')
+            url = hrefs?.at(i) ?? ''
+        else if (__route__.fullPath.endsWith('/'))
+            url = __route__.fullPath + hrefs?.at(i)
+        else
+            url = __route__.fullPath + '/' + hrefs?.at(i)
+        return {
+            "name": hrefs?.at(i),   //目录名
+            "date": dates[i],       //日期
+            "url": url              //真实目录名
+        }
+    })
+})
+//初始化路由
+routing()
+//监听路由
+watch(__route__, () => {
+    routing()
+})
 /**
  * 为每一个镜像设置背景样式，根据镜像状态
  * 该方法返回值为传入e-table中row-class-name的样式类名
  */
 
-const tableRowClassName = ({
-    row
-}: {
-    row: MirrorItem
-}) => {
-    if (row.status > 0) {
-        return 'process-row'
-    } else if (row.status === 0) {
-        return 'success-row'
-    } else if (row.status < 0) {
-        return 'warning-row'
-    }
-    return ''
-}
-
 
 const boxWidth = ref(0)
-const dataResult = ref([])
 const global: any = inject('global')
 
 /**
@@ -46,39 +58,13 @@ const global: any = inject('global')
  */
 onMounted(() => {
     setBoxWidth(global.pageWidth.value)
-    sync();
-    setInterval(sync, 10000);
 })
-
-/**
- * 使用Axios库进行HTTP GET请求，以获取/api/status端点的数据。
- * 当响应成功返回时，它将响应数据赋给dataResult.value和tableData.value。
- * 该函数作用是同步数据
- */
-const sync = () => {
-    axios.get('/api/status').then(res => {
-        //axios.get('https://mirrors.szu.moe/api').then(res => {
-        dataResult.value = global.tableData.value = res.data
-    })
-}
 
 /**
  * 使用watch监听窗口大小变化，设置全局窗口大小
  */
 watch(global.pageWidth, () => {
     setBoxWidth(global.pageWidth.value)
-})
-
-/**
- * 使用watch监听搜索框数据变化，并且实现搜索功能
- */
-watch(global.searchText, () => {
-    let sText: string = global.searchText.value
-    if (sText.length > 0)
-        dataResult.value = global.tableData.value.filter(
-            (e: MirrorItem) => e.name.indexOf(sText) != -1)
-    else
-        dataResult.value = global.tableData.value
 })
 
 /**
@@ -98,15 +84,19 @@ const setBoxWidth = (screenWidth: number) => {
 
 <template>
     <!-- 绑定数据，设置行样式 -->
-    <ElTable :data="dataResult" :row-class-name="tableRowClassName">
+    <ElTable :data="directory">
         <!-- 自定义列，表示镜像名 -->
         <ElTableColumn prop="name" label="Name">
             <!-- 定义插槽 -->
             <template #default="scope">
                 <!-- 外部包裹的flex盒子 -->
                 <div style="display: flex;align-items: center;">
-                    <!-- 链接，可单击的实体 -->
-                    <RouterLink class="linkItem" :to=scope.row.name>{{ scope.row.name }}</RouterLink>
+                    <!-- 链接，可单击的实体，需要考虑是文件还是文件夹 -->
+                    <RouterLink v-if="scope.row.name.endsWith('/')" class="linkItem" :to=scope.row.url>
+                        {{ scope.row.name }}
+                    </RouterLink>
+                    <a v-if="!scope.row.name.endsWith('/')" :href="scope.row.url" class="linkItem" download>
+                        {{ scope.row.name }}</a>
                     <!-- 链接旁边的小问号，暂时不起作用，后续配合help功能使用 -->
                     <el-icon v-if="false && scope.row.name != null" :size="18" color="var(--color-text)"
                         style="margin-left: 5px; cursor: pointer;">
@@ -120,13 +110,7 @@ const setBoxWidth = (screenWidth: number) => {
             <template #default="scope">
                 <div style="font-size:16px;display: flex;align-items: center;">
                     <!-- 显示时间 -->
-                    <span>{{ scope.row.lastupdate }}</span>
-                    <div class="button-set">
-                        <!-- 三种按钮 -->
-                        <span v-if="scope.row.status === 0" class="ok-button">OK</span>
-                        <span v-if="scope.row.status > 0" class="sync-button">syncing</span>
-                        <span v-if="scope.row.status < 0" class="fail-button">failed</span>
-                    </div>
+                    <span>{{ scope.row.date }}</span>
                 </div>
                 <!-- 重传多次显示角标，内容为重传次数 -->
                 <span :class="{ 'corner-tip': true, 'sync-tip': scope.row.status > 1 }"

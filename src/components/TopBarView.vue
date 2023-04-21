@@ -2,17 +2,24 @@
 import { ref, watch, inject, onMounted } from 'vue'
 import { ElButton, ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon } from 'element-plus'
 import { Expand } from '@element-plus/icons-vue';
+// 全局注入
 const titleText = ref('深大开源镜像')
 const global: any = inject('global')
-
+/**
+ * 根据页宽设置初始站名
+ */
 onMounted(() => {
     setTitleText(global.pageWidth.value)
 })
-
+/**
+ * 监听页宽变化
+ */
 watch(global.pageWidth, () => {
     setTitleText(global.pageWidth.value)
 })
-
+/**
+ * 设置页宽
+ */
 const setTitleText = (screenWidth: number) => {
     if (screenWidth > 420) titleText.value = '深圳大学开源镜像站'
     else titleText.value = '深大开源镜像'

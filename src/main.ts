@@ -10,12 +10,15 @@ const pageWidth = ref(0)
 
 const searchText = ref('')
 
+const tableData = ref([])
+
 
 app.use(router)
 
 app.provide('global', {
     pageWidth,
-    searchText
+    searchText,
+    tableData
 })
 
 app.mount('#app')

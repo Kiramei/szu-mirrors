@@ -2,9 +2,20 @@
 import MirrorList from '@/components/MirrorList.vue';
 import { ElIcon, ElInput } from 'element-plus';
 import { Box } from '@element-plus/icons-vue'
-import { inject } from 'vue'
+import { computed, inject, ref } from 'vue'
+import DirectoryView from '@/components/DirectoryView.vue'
+import { useRoute } from 'vue-router';
 
 const global: any = inject('global')
+const currentPath = ref(window.location.hash)
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash
+})
+
+const currentView = computed(() => {
+  return useRoute().fullPath === '/' ? MirrorList : DirectoryView
+})
 
 </script>
 
@@ -12,20 +23,21 @@ const global: any = inject('global')
   <main class="mirrorView">
     <header style="width:100%;display:flex;">
       <div style="display:flex;">
-        <el-icon :size="30">
+        <ElIcon :size="30">
           <Box />
-        </el-icon>
+        </ElIcon>
         <span class="title">
           镜像列表
         </span>
       </div>
       <div class="flex-grow"></div>
       <div class="search-box">
+        <!-- 搜索框 -->
         <ElInput v-model="global.searchText.value" placeholder="搜索" />
       </div>
     </header>
     <div class="mirrorList">
-      <MirrorList />
+      <component :is="currentView"></component>
     </div>
   </main>
 </template>
