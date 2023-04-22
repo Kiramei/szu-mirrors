@@ -26,14 +26,14 @@
   --vt-c-sync-button-color-light: #5bc0de;
   --vt-c-fail-button-color-light: #e6a23c;
   --vt-c-ok-button-color-light: #67c23a;
-  --vt-c-button-text-color-light:#ffffff;
-  --vt-c-corner-tip-color-light:#f56c6c;
-  
+  --vt-c-button-text-color-light: #ffffff;
+  --vt-c-corner-tip-color-light: #f56c6c;
+
   --vt-c-sync-button-color-dark: #367284;
   --vt-c-fail-button-color-dark: #805a22;
   --vt-c-ok-button-color-dark: #3c7122;
-  --vt-c-button-text-color-dark:#d2d2d2;
-  --vt-c-corner-tip-color-dark:#c55858;
+  --vt-c-button-text-color-dark: #d2d2d2;
+  --vt-c-corner-tip-color-dark: #c55858;
 
 }
 
@@ -54,11 +54,15 @@
   --ok-button-color: var(--vt-c-ok-button-color-light);
   --fail-button-color: var(--vt-c-fail-button-color-light);
   --sync-button-color: var(--vt-c-sync-button-color-light);
-  --corner-tip-color:var(--vt-c-corner-tip-color-light);
-  --status-button-text-color:var(--vt-c-button-text-color-light);
+  --corner-tip-color: var(--vt-c-corner-tip-color-light);
+  --status-button-text-color: var(--vt-c-button-text-color-light);
 
 }
 
+.el-notification .el-notification__closeBtn {
+  top: 5px;
+  right: 0;
+}
 
 .el-table .warning-row {
   --el-table-tr-bg-color: #e6a23c33;
@@ -70,6 +74,11 @@
 
 .el-table .process-row {
   --el-table-tr-bg-color: rgba(106, 227, 219, 0.178);
+}
+
+.el-table thead .cell {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 a {
@@ -95,36 +104,10 @@ a {
     --ok-button-color: var(--vt-c-ok-button-color-dark);
     --fail-button-color: var(--vt-c-fail-button-color-dark);
     --sync-button-color: var(--vt-c-sync-button-color-dark);
-    --corner-tip-color:var(--vt-c-corner-tip-color-dark);
+    --corner-tip-color: var(--vt-c-corner-tip-color-dark);
 
-  --status-button-text-color:var(--vt-c-button-text-color-dark);
+    --status-button-text-color: var(--vt-c-button-text-color-dark);
 
-  }
-
-  .el-button:focus,.el-button:hover,.el-button:active,.el-button{
-    color: var(--color-text);
-    outline: none;
-    --el-text-color-regular:var(--color-text);
-    --el-button-bg-color:var(--color-background);
-    --el-button-hover-bg-color:var(--color-background);
-    --el-button-hover-border-color: var(--color-text);
-    --el-button-active-color: #ffffff69;
-    --el-button-active-bg-color:#ffffff39;
-    --el-button-active-border-color:#ffffff39;
-  } 
-
-  .el-dropdown-menu__item,.el-dropdown-menu{
-    color: var(--color-text);
-    background-color: var(--color-background);
-  }
-  
-
-  .el-table .warning-row {
-    --el-table-tr-bg-color: #e6a23c33;
-  }
-
-  .el-table .success-row {
-    --el-table-tr-bg-color: #67c23a32;
   }
 
   .el-table .process-row {
@@ -138,6 +121,18 @@ a {
     transition: 0.6s;
   }
 
+
+}
+
+
+*::-webkit-scrollbar {
+  height: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(224, 220, 220, .66667);
+  background-image: -webkit-linear-gradient(45deg, hsla(0, 0%, 100%, .2) 25%, transparent 0, transparent 50%, hsla(0, 0%, 100%, .2) 0, hsla(0, 0%, 100%, .2) 75%, transparent 0, transparent);
 }
 
 *,
@@ -159,8 +154,6 @@ a {
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,

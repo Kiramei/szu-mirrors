@@ -1,49 +1,102 @@
 <script setup lang="ts">
-import { ElTable, ElTableColumn, ElIcon } from 'element-plus';
+import {
+    ElTable, ElTableColumn, ElIcon, vLoading,
+    ElBreadcrumb, ElBreadcrumbItem, ElNotification
+} from 'element-plus';
 import { QuestionFilled } from '@element-plus/icons-vue'
-import { ref, watch, inject, onMounted } from 'vue'
+import { ref, watch, inject, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const directory = ref([])
+const showList = ref([])
 const __route__ = useRoute()
+const __loading__ = ref(true)
+
+interface DirInfo {
+    name: string,
+    date: string,
+    url: string
+}
+
 /**
  * routing负责目录的路由
  */
-const routing = () => axios(__route__.fullPath).then(res => {
-    //获取反向代理的数据
-    const origin = res.data
-    //hrefs的正则匹配，用于筛选<a href="">中href的值
-    const regex_1 = /<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/gi;
-    const matches_1 = origin.match(regex_1);
-    const hrefs = matches_1?.map((match: string) => match.replace(/<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/i, '$1'));
-    //dates的正则匹配，用于筛选<a href="">后面的日期信息
-    const regex_2 = /<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/gi;
-    const matches_2 = origin.match(regex_2);
-    const dates = ['', ...matches_2?.map((match: string) => match.replace(/<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/i, '$1')) ?? []];
-    //返回表中所需填充的信息，作为对象数组返回
-    directory.value = hrefs?.map((_e: string, i: number) => {
-        let url: string
-        //以下生成真实目录名，考虑各种情况
-        if (hrefs?.at(i) === '../')
-            url = hrefs?.at(i) ?? ''
-        else if (__route__.fullPath.endsWith('/'))
-            url = __route__.fullPath + hrefs?.at(i)
-        else
-            url = __route__.fullPath + '/' + hrefs?.at(i)
-        return {
-            "name": hrefs?.at(i),   //目录名
-            "date": dates[i],       //日期
-            "url": url              //真实目录名
-        }
+const routing = () =>
+    //axios请求原页面，重新绘制
+    axios(
+        __route__.fullPath,
+        { timeout: 3000 }
+    ).then(res => {
+        //获取反向代理的数据
+        const origin = res.data
+        // const origin = `<html><head><title>Index of /pypi/</title></head><body><h1>Index of /pypi/</h1><hr><pre><a href="../">../</a><a href="json/">json/</a>                                              22-Apr-2023 12:27                   -<a href="local-stats/">local-stats/</a>                                       04-Mar-2023 00:14                   -<a href="packages/">packages/</a>                                          04-Mar-2023 00:21                   -<a href="pypi/">pypi/</a>                                              22-Apr-2023 12:27                   -<a href="simple/">simple/</a>                                            22-Apr-2023 12:27                   -<a href="last-modified">last-modified</a>                                      21-Apr-2023 12:47                  18</pre><hr></body></html>`
+        //hrefs的正则匹配，用于筛选<a href="">中href的值
+        const regex_1 = /<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/gi;
+        const matches_1 = origin.match(regex_1);
+        const hrefs = matches_1?.map((match: string) => match.replace(/<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/i, '$1'));
+        //dates的正则匹配，用于筛选<a href="">后面的日期信息
+        const regex_2 = /<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/gi;
+        const matches_2 = origin.match(regex_2);
+        const dates = ['', ...matches_2?.map((match: string) => match.replace(/<a\s[^>]*>[^<]*<\/a>\s+(\d{2}-[A-Za-z]{3}-\d{4}\s+\d{2}:\d{2})/i, '$1')) ?? []];
+        //返回表中所需填充的信息，作为对象数组返回
+        showList.value = directory.value = hrefs?.map((_e: string, i: number) => {
+            let url: string
+            //以下生成真实目录名，考虑各种情况
+            if (hrefs?.at(i) === '../')
+                url = hrefs?.at(i) ?? ''
+            else if (__route__.fullPath.endsWith('/'))
+                url = __route__.fullPath + hrefs?.at(i)
+            else
+                url = __route__.fullPath + '/' + hrefs?.at(i)
+            return {
+                "name": hrefs?.at(i),   //目录名
+                "date": dates[i],       //日期
+                "url": url              //真实目录名
+            }
+        })
+        __loading__.value = false
+    }, () => {
+        ElNotification({
+            title: 'Error',
+            message: `${__route__.fullPath} 暂时无法响应，或者是响应超时`,
+            type: 'error',
+            position: 'bottom-right',
+            duration: 5000
+        })
+        setTimeout(() => {
+            const prev = (__route__.fullPath.match(/^(.*\/)[^/]*\/?$/) || ['', '/'])[1]
+            router.push(prev)
+        }, 1000);
     })
-})
 //初始化路由
 routing()
 //监听路由
 watch(__route__, () => {
-    routing()
+    if (__route__.fullPath !== '/')
+        routing()
 })
+/**
+ * 导航栏设置
+ */
+const routeList = computed(() => {
+    let res = __route__.fullPath.split('/').slice(1)
+    if (res[res.length - 1] !== '') res.push('')
+    res = ['root', ...res]
+    let realUrl = ''
+    return res.map((e, i) => {
+        if (e === 'root') realUrl += '/'
+        else if (e != '')
+            if (i !== res.length - 2) realUrl += e + '/'
+            else realUrl += e
+        return {
+            "realUrl": realUrl,
+            "name": e
+        }
+    })
+})
+
 /**
  * 为每一个镜像设置背景样式，根据镜像状态
  * 该方法返回值为传入e-table中row-class-name的样式类名
@@ -78,13 +131,31 @@ const setBoxWidth = (screenWidth: number) => {
     else boxWidth.value = 185
 }
 
-
+/**
+ * 使用watch监听搜索框数据变化，并且实现搜索功能
+ */
+watch(global.searchText, () => {
+    let sText: string = global.searchText.value
+    if (sText.length > 0)
+        showList.value = directory.value.filter(
+            (e: DirInfo) => e.name.indexOf(sText) != -1)
+    else
+        showList.value = directory.value
+})
 
 </script>
 
 <template>
+    <div class="nav_bar">
+        <span style="min-width: 90px;">当前目录为：</span>
+        <ElBreadcrumb separator="/" class="nav_breadcrumb">
+            <ElBreadcrumbItem v-for="item in routeList" :to="`${item.realUrl}`" :key="item.name">
+                {{ item.name }}
+            </ElBreadcrumbItem>
+        </ElBreadcrumb>
+    </div>
     <!-- 绑定数据，设置行样式 -->
-    <ElTable :data="directory">
+    <ElTable :data="showList" v-loading="__loading__">
         <!-- 自定义列，表示镜像名 -->
         <ElTableColumn prop="name" label="Name">
             <!-- 定义插槽 -->
@@ -95,7 +166,7 @@ const setBoxWidth = (screenWidth: number) => {
                     <RouterLink v-if="scope.row.name.endsWith('/')" class="linkItem" :to=scope.row.url>
                         {{ scope.row.name }}
                     </RouterLink>
-                    <a v-if="!scope.row.name.endsWith('/')" :href="scope.row.url" class="linkItem" download>
+                    <a v-if="!scope.row.name.endsWith('/')" :href="scope.row.url" id="dir_item" class="linkItem" download>
                         {{ scope.row.name }}</a>
                     <!-- 链接旁边的小问号，暂时不起作用，后续配合help功能使用 -->
                     <el-icon v-if="false && scope.row.name != null" :size="18" color="var(--color-text)"
@@ -112,119 +183,22 @@ const setBoxWidth = (screenWidth: number) => {
                     <!-- 显示时间 -->
                     <span>{{ scope.row.date }}</span>
                 </div>
-                <!-- 重传多次显示角标，内容为重传次数 -->
-                <span :class="{ 'corner-tip': true, 'sync-tip': scope.row.status > 1 }"
-                    v-if="scope.row.status !== 0 && Math.abs(scope.row.status) > 1">{{
-                        Math.abs(scope.row.status) }}</span>
             </template>
         </ElTableColumn>
     </ElTable>
 </template>
 
 <style>
-@media screen and (max-width: 450px) {
-    .button-set {
-        display: none;
-    }
+.nav_bar {
+    display: flex;
+    margin-left: 12px;
 }
 
-@media screen and (min-width: 450px) {
-    .button-set {
-        display: flex;
-        align-items: center;
-    }
-}
-
-.el-input,
-.el-input__wrapper {
-    background-color: var(--color-background);
-}
-
-.el-input__inner {
-    color: var(--color-text, var(--color-text));
-}
-
-.ok-button {
-    user-select: none;
-    background-color: var(--ok-button-color);
-    color: var(--status-button-text-color);
-    border-radius: 5px;
-    padding: 0px 6px 0px 5px;
-    height: 20px;
-    font-size: 12px;
-    line-height: 20px;
-    font-weight: 500;
-    margin-left: 10px;
-    text-shadow: 1px 0px #848484bf;
-}
-
-.sync-button {
-    user-select: none;
-    background-color: var(--sync-button-color);
-    color: var(--status-button-text-color);
-    border-radius: 5px;
-    padding: 0px 6px 0px 5px;
-    height: 20px;
-    font-size: 12px;
-    line-height: 18px;
-    font-weight: 500;
-    margin-left: 10px;
-    text-shadow: 1px 0px #848484bf;
-}
-
-.fail-button {
-    user-select: none;
-    background-color: var(--fail-button-color);
-    color: var(--status-button-text-color);
-    border-radius: 5px;
-    padding: 0px 6px 0px 5px;
-    height: 20px;
-    font-size: 12px;
-    line-height: 20px;
-    font-weight: 500;
-    margin-left: 10px;
-    text-shadow: 1px 0px #848484bf;
-}
-
-.corner-tip {
-    position: absolute;
-    margin-left: 190px;
-    margin-top: -23px;
-    min-width: 16px;
-    font-size: 10px;
-    background: var(--corner-tip-color);
-    color: white;
-    border-radius: 10px;
-    line-height: 10px;
-    padding: 3px;
-    text-align: center;
-    user-select: none;
-}
-
-.sync-tip {
-    margin-left: 202px;
-}
-
-.linkItem {
-    font-size: 16px;
-}
-
-.el-table thead .cell {
-    color: var(--color-text);
-    font-weight: 600;
-}
-
-.el-table {
-    --el-table-bg-color: var(--color-background);
-    --el-table-border-color: var(--color-border);
-    --el-table-text-color: var(--color-text);
-    --el-table-header-text-color: var(--color-text);
-    --el-table-header-bg-color: var(--color-background);
-    --el-table-row-hover-bg-color: var(--table-row-color);
-    --el-table-tr-bg-color: var(--color-background);
-}
-
-.el-table__header-wrapper {
-    border-bottom: solid 1.5px var(--color-border);
+.nav_breadcrumb {
+    height: 25px;
+    line-height: 25px;
+    display: flex;
+    overflow-y: hidden;
+    white-space: nowrap
 }
 </style>

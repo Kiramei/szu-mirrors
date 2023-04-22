@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElTable, ElTableColumn, ElIcon } from 'element-plus';
+import { ElTable, ElTableColumn, ElIcon, vLoading } from 'element-plus';
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ref, watch, inject, onMounted } from 'vue'
 import axios from 'axios'
@@ -40,6 +40,7 @@ const tableRowClassName = ({
 const boxWidth = ref(0)
 const dataResult = ref([])
 const global: any = inject('global')
+const __loading__ = ref(true)
 
 /**
  * 定义页面初始化操作，设置页面每10秒完成更新
@@ -59,6 +60,7 @@ const sync = () => {
     axios.get('/api/status').then(res => {
         //axios.get('https://mirrors.szu.moe/api').then(res => {
         dataResult.value = global.tableData.value = res.data
+        __loading__.value = false
     })
 }
 
@@ -98,7 +100,7 @@ const setBoxWidth = (screenWidth: number) => {
 
 <template>
     <!-- 绑定数据，设置行样式 -->
-    <ElTable :data="dataResult" :row-class-name="tableRowClassName">
+    <ElTable v-loading="__loading__" :data="dataResult" :row-class-name="tableRowClassName">
         <!-- 自定义列，表示镜像名 -->
         <ElTableColumn prop="name" label="Name">
             <!-- 定义插槽 -->
@@ -151,14 +153,6 @@ const setBoxWidth = (screenWidth: number) => {
     }
 }
 
-.el-input,
-.el-input__wrapper {
-    background-color: var(--color-background);
-}
-
-.el-input__inner {
-    color: var(--color-text, var(--color-text));
-}
 
 .ok-button {
     user-select: none;
@@ -223,24 +217,8 @@ const setBoxWidth = (screenWidth: number) => {
 
 .linkItem {
     font-size: 16px;
-}
-
-.el-table thead .cell {
-    color: var(--color-text);
-    font-weight: 600;
-}
-
-.el-table {
-    --el-table-bg-color: var(--color-background);
-    --el-table-border-color: var(--color-border);
-    --el-table-text-color: var(--color-text);
-    --el-table-header-text-color: var(--color-text);
-    --el-table-header-bg-color: var(--color-background);
-    --el-table-row-hover-bg-color: var(--table-row-color);
-    --el-table-tr-bg-color: var(--color-background);
-}
-
-.el-table__header-wrapper {
-    border-bottom: solid 1.5px var(--color-border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>

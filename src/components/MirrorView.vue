@@ -7,11 +7,6 @@ import DirectoryView from '@/components/DirectoryView.vue'
 import { useRoute } from 'vue-router';
 
 const global: any = inject('global')
-const currentPath = ref(window.location.hash)
-
-window.addEventListener('hashchange', () => {
-  currentPath.value = window.location.hash
-})
 
 const currentView = computed(() => {
   return useRoute().fullPath === '/' ? MirrorList : DirectoryView
