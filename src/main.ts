@@ -1,6 +1,7 @@
-import { computed, createApp, ref, watch } from 'vue'
+import { createApp, ref } from 'vue'
 import App from './App.vue'
 import router from './router'
+import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './assets/main.css'
 const app = createApp(App)
@@ -22,6 +23,7 @@ const media = window.matchMedia('(prefers-color-scheme:dark)')
 media.addEventListener('change', dark)
 
 app.use(router)
+app.use(ElementPlus)
 
 app.provide('global', {
     pageWidth,

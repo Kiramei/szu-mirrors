@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ElIcon } from 'element-plus';
-import { Notification, DArrowRight } from '@element-plus/icons-vue'
+import { Notification } from '@element-plus/icons-vue'
 
 // import { ref } from 'vue'
 

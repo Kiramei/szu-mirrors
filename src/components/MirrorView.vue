@@ -2,7 +2,7 @@
 import MirrorList from '@/components/MirrorList.vue';
 import { ElIcon, ElInput } from 'element-plus';
 import { Box } from '@element-plus/icons-vue'
-import { computed, inject, ref } from 'vue'
+import { computed, inject } from 'vue'
 import DirectoryView from '@/components/DirectoryView.vue'
 import { useRoute } from 'vue-router';
 

@@ -1,12 +1,12 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import {
-    ElTable, ElTableColumn, ElIcon, vLoading,
-    ElBreadcrumb, ElBreadcrumbItem, ElNotification
+    ElIcon, ElTableV2, ElBreadcrumb, ElBreadcrumbItem,
+    ElNotification, TableV2FixedDir, type Column, type TableV2Instance
 } from 'element-plus';
-import { QuestionFilled } from '@element-plus/icons-vue'
+import { Loading } from '@element-plus/icons-vue'
 import { ref, watch, inject, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router';
+import { useRoute, RouterLink } from 'vue-router';
 import router from '@/router';
 
 const directory = ref([])
@@ -15,23 +15,24 @@ const __route__ = useRoute()
 const __loading__ = ref(true)
 
 interface DirInfo {
-    name: string,
-    date: string,
-    url: string
+    name: Array<string>,
+    date: string
 }
 
 /**
  * routing负责目录的路由
  */
-const routing = () =>
+
+const routing = () => {
+    __loading__.value = true
     //axios请求原页面，重新绘制
     axios(
-        __route__.fullPath,
-        { timeout: 3000 }
+        'mbt.html',
+        // __route__.fullPath,
+        { timeout: 1000 * 180 }
     ).then(res => {
         //获取反向代理的数据
         const origin = res.data
-        // const origin = `<html><head><title>Index of /pypi/</title></head><body><h1>Index of /pypi/</h1><hr><pre><a href="../">../</a><a href="json/">json/</a>                                              22-Apr-2023 12:27                   -<a href="local-stats/">local-stats/</a>                                       04-Mar-2023 00:14                   -<a href="packages/">packages/</a>                                          04-Mar-2023 00:21                   -<a href="pypi/">pypi/</a>                                              22-Apr-2023 12:27                   -<a href="simple/">simple/</a>                                            22-Apr-2023 12:27                   -<a href="last-modified">last-modified</a>                                      21-Apr-2023 12:47                  18</pre><hr></body></html>`
         //hrefs的正则匹配，用于筛选<a href="">中href的值
         const regex_1 = /<a\s[^>]*href\s*=\s*['"]([^"']*)['"][^>]*>/gi;
         const matches_1 = origin.match(regex_1);
@@ -51,9 +52,8 @@ const routing = () =>
             else
                 url = __route__.fullPath + '/' + hrefs?.at(i)
             return {
-                "name": hrefs?.at(i),   //目录名
+                "name": [hrefs?.at(i), url],   //目录名
                 "date": dates[i],       //日期
-                "url": url              //真实目录名
             }
         })
         __loading__.value = false
@@ -70,6 +70,7 @@ const routing = () =>
             router.push(prev)
         }, 1000);
     })
+}
 //初始化路由
 routing()
 //监听路由
@@ -98,6 +99,58 @@ const routeList = computed(() => {
 })
 
 /**
+ * Column 是单元的自定义组件
+ */
+const columns: Column<any>[] = [
+    {
+        key: 'name',
+        title: 'Name',
+        dataKey: 'name',
+        width: 640,
+        // fixed: TableV2FixedDir.LEFT,
+        cellRenderer: ({ cellData: name, }) =>
+            <>
+                {
+                    /* 链接，可单击的实体，需要考虑是文件还是文件夹 */
+                    name[0].endsWith('/') ?
+                        <RouterLink to={name[1]} class="linkItem" >
+                            {name[0]}
+                        </RouterLink>
+                        :
+                        <a href={name[1]} id="dir_item" class="linkItem" download={name[0]}>
+                            {name[0]}
+                        </a>
+                }
+                {
+                    /* 链接旁边的小问号，暂时不起作用，后续配合help功能使用 */
+                    /* false && name != null?
+                    <el-icon size={18} color={'var(--color-text)'}
+                        style="margin-left: 5px; cursor: pointer;">
+                        <QuestionFilled />
+                    </el-icon>:<></> */
+                }
+            </>,
+    }, {
+        key: 'date',
+        title: 'Date',
+        dataKey: 'date',
+        width: 148,
+        fixed: TableV2FixedDir.RIGHT,
+        cellRenderer: ({ cellData: date }) => (
+            <span class="flex items-center">
+                {date}
+            </span>
+        ),
+    }
+]
+
+const tableRef = ref<TableV2Instance>()
+
+const tableScroll=()=>{
+    console.log(tableRef.value?.scrollToTop(150))
+}
+
+/**
  * 为每一个镜像设置背景样式，根据镜像状态
  * 该方法返回值为传入e-table中row-class-name的样式类名
  */
@@ -111,6 +164,7 @@ const global: any = inject('global')
  */
 onMounted(() => {
     setBoxWidth(global.pageWidth.value)
+    setTabelWidth(global.pageWidth.value)
 })
 
 /**
@@ -118,7 +172,18 @@ onMounted(() => {
  */
 watch(global.pageWidth, () => {
     setBoxWidth(global.pageWidth.value)
+    setTabelWidth(global.pageWidth.value)
 })
+
+const apt = ref(0)
+
+const setTabelWidth = (pw: number) => {
+    if (pw >= 1024)
+        apt.value = Math.min(pw - 64 - 339.52, 790.39)
+    else
+        apt.value = pw - 64
+    // columns[0].width = pw / 2
+}
 
 /**
  * 该方法完成自适应操作，对大于450px的页宽设置250px的盒子宽度
@@ -138,7 +203,7 @@ watch(global.searchText, () => {
     let sText: string = global.searchText.value
     if (sText.length > 0)
         showList.value = directory.value.filter(
-            (e: DirInfo) => e.name.indexOf(sText) != -1)
+            (e: DirInfo) => e.name[0].indexOf(sText) != -1)
     else
         showList.value = directory.value
 })
@@ -154,38 +219,15 @@ watch(global.searchText, () => {
             </ElBreadcrumbItem>
         </ElBreadcrumb>
     </div>
-    <!-- 绑定数据，设置行样式 -->
-    <ElTable :data="showList" v-loading="__loading__">
-        <!-- 自定义列，表示镜像名 -->
-        <ElTableColumn prop="name" label="Name">
-            <!-- 定义插槽 -->
-            <template #default="scope">
-                <!-- 外部包裹的flex盒子 -->
-                <div style="display: flex;align-items: center;">
-                    <!-- 链接，可单击的实体，需要考虑是文件还是文件夹 -->
-                    <RouterLink v-if="scope.row.name.endsWith('/')" class="linkItem" :to=scope.row.url>
-                        {{ scope.row.name }}
-                    </RouterLink>
-                    <a v-if="!scope.row.name.endsWith('/')" :href="scope.row.url" id="dir_item" class="linkItem" download>
-                        {{ scope.row.name }}</a>
-                    <!-- 链接旁边的小问号，暂时不起作用，后续配合help功能使用 -->
-                    <el-icon v-if="false && scope.row.name != null" :size="18" color="var(--color-text)"
-                        style="margin-left: 5px; cursor: pointer;">
-                        <QuestionFilled />
-                    </el-icon>
-                </div>
-            </template>
-        </ElTableColumn>
-        <!-- 自定义列，表示最新更新时间 -->
-        <ElTableColumn prop="date" label="Last Update" :width="boxWidth">
-            <template #default="scope">
-                <div style="font-size:16px;display: flex;align-items: center;">
-                    <!-- 显示时间 -->
-                    <span>{{ scope.row.date }}</span>
-                </div>
-            </template>
-        </ElTableColumn>
-    </ElTable>
+    <el-table-v2 ref="tableRef" :columns="columns" :data="showList" :width="apt" :height="400" @click="tableScroll" fixed>
+        <template #overlay v-if="__loading__">
+            <div class="el-loading-mask item-center">
+                <el-icon class="is-loading" color="var(--el-color-primary)" :size="26">
+                    <Loading />
+                </el-icon>
+            </div>
+        </template>
+    </el-table-v2>
 </template>
 
 <style>
@@ -200,5 +242,11 @@ watch(global.searchText, () => {
     display: flex;
     overflow-y: hidden;
     white-space: nowrap
+}
+
+.item-center {
+    display: flex;
+    align-items: center;
+    justify-content: center
 }
 </style>
